@@ -67,8 +67,13 @@ async def group_message_handler(app: GraiaMiraiApplication, message: MessageChai
         videoInformation = avcrawler(message.asDisplay())
         await app.sendGroupMessage(group,MessageChain.create([Plain(videoInformation)]))
 
+    if message.asDisplay() == "色图时间":
+        url = "https://api.nmb.show/1985acg.php"
 
-        
-    
+        try:
+            await app.sendGroupMessage(group, MessageChain.create([Image.fromNetworkAddress(url)]))
+        except:
+            await app.sendGroupMessage(group,MessageChain.create([Plain("无法连接")]))
+
 
 app.launch_blocking()
