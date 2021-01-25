@@ -37,20 +37,14 @@ app = GraiaMiraiApplication(
     )
 )
 
-@bcc.receiver(FriendMessage)
-async def friend_message_listener(app: GraiaMiraiApplication, friend: Friend):
-    await app.sendFriendMessage(friend, MessageChain.create([
-        Plain("Hello, World!")
-    ]))
-
 @bcc.receiver(GroupMessage)
 async def group_message_handler(app: GraiaMiraiApplication, message: MessageChain, group: Group, member: Member):
     if message.asDisplay() == "help":
-        sstr = "目前已经公开的功能有：" + "\n"
-        sstr += "打招呼功能，输入hi说不定可以得到妹妹的回应哦~" + "\n"
-        sstr += "查bv号和av号的功能，能够显示视频的详细信息~" + "\n"
-        sstr += "随机提供涩图的功能，输入‘色图时间’或者‘来点涩图’就可以随机发送一张图片了~" + "\n"
-        sstr += "凛夜sama赛高！（不要忘了所有的功能都是凛夜亲手敲的代码哦）" + "\n"
+        sstr = "目前已经公开的功能有：" + "\n\n" 
+        sstr += "①打招呼功能，输入hi说不定可以得到妹妹的回应哦~" + "\n\n"
+        sstr += "②查bv号和av号的功能，能够显示视频的详细信息~" + "\n\n"
+        sstr += "③随机提供涩图的功能，输入‘色图时间’或者‘来点涩图’就可以随机发送一张图片了~" + "\n\n"
+        sstr += "凛夜sama赛高！（不要忘了所有的功能都是凛夜亲手敲的代码哦）"
         await app.sendGroupMessage(group,MessageChain.create([Plain(sstr)]))
 
     if message.asDisplay() == "hi":
@@ -68,14 +62,15 @@ async def group_message_handler(app: GraiaMiraiApplication, message: MessageChai
     if message.asDisplay() == "草" or message.asDisplay() == "艹":
         await app.sendGroupMessage(group,MessageChain.create([Plain("草")]))
 
-    if message.asDisplay().startswith("BV"):
-        videoInformation = bvcrawler(message.asDisplay())
-        await app.sendGroupMessage(group,MessageChain.create([Plain(videoInformation)]))
-    elif message.asDisplay().startswith("AV") or message.asDisplay().startswith("av"):
-        videoInformation = avcrawler(message.asDisplay())
-        await app.sendGroupMessage(group,MessageChain.create([Plain(videoInformation)]))
+    if(member.id != 2083664136 and member.id != 2079373402):
+        if message.asDisplay().startswith("BV"):
+            videoInformation = bvcrawler(message.asDisplay())
+            await app.sendGroupMessage(group,MessageChain.create([Plain(videoInformation)]))
+        elif message.asDisplay().startswith("AV") or message.asDisplay().startswith("av"):
+            videoInformation = avcrawler(message.asDisplay())
+            await app.sendGroupMessage(group,MessageChain.create([Plain(videoInformation)]))
 
-    if message.asDisplay() == "色图时间" or message.asDisplay() == "来点涩图":
+    if message.asDisplay() == "色图时间" or message.asDisplay() == "来点涩图" or message.asDisplay() == "来点色图":
         url = "https://api.nmb.show/1985acg.php"
 
         try:

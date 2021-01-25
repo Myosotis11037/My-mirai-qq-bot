@@ -17,11 +17,10 @@ from graia.application.message.chain import MessageChain
 from graia.application.message.elements.internal import Plain
 from graia.broadcast.interrupt.waiter import Waiter
 
-headers = {
-    'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.62 Safari/537.36'}
+headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:40.0) Gecko/20100101 Firefox/40.1',}
 
 
-def bvcrawler(bv = "BV1ax411w7gM"):
+def bvcrawler(bv):
 
 
     url = "http://api.bilibili.com/x/web-interface/view?bvid=" + bv
@@ -61,7 +60,7 @@ def bvcrawler(bv = "BV1ax411w7gM"):
     return sstr
 
 
-def avcrawler(av = "av85440373"):
+def avcrawler(av):
     av = av[2:]
     url = "http://api.bilibili.com/x/web-interface/view?aid=" + av
     information = requests.get(url,headers=headers).json()
@@ -116,6 +115,3 @@ def dec(x):
         r += tr[x[s[i]]]*58**i
     return (r-add) ^ xor
 
-
-if __name__ == '__main__':
-    print(avcrawler())
