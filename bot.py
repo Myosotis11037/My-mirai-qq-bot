@@ -3,6 +3,7 @@ import datetime
 import json
 import operator
 import random
+import requests
 from re import escape
 from typing import Dict, Optional
 
@@ -21,6 +22,7 @@ from graia.broadcast.interrupt import InterruptControl
 from graia.broadcast.interrupt.waiter import Waiter
 
 from function.bilibili import bvcrawler
+from function.bilibili import avcrawler
 
 loop = asyncio.get_event_loop()
 
@@ -45,11 +47,13 @@ async def friend_message_listener(app: GraiaMiraiApplication, friend: Friend):
 async def group_message_handler(app: GraiaMiraiApplication, message: MessageChain, group: Group, member: Member):
     if message.asDisplay() == "hi":
         if(member.id == 5980403):
-            await app.sendGroupMessage(group,MessageChain.create([Plain("哥哥爱死你了mua")]))
+            await app.sendGroupMessage(group,MessageChain.create([At(5980403),Plain(" 哥哥爱死你了mua")]))
         elif(member.id == 349468958):
             await app.sendGroupMessage(group,MessageChain.create([Plain("哥哥我也爱你呢❤")]))
         elif(member.id == 865734287):
             await app.sendGroupMessage(group,MessageChain.create([Plain("mu..(害怕)mua?"),Face(faceId=111)]))
+        elif(member.id == 744938425):
+            await app.sendGroupMessage(group,MessageChain.create([At(744938425),Plain(" 欧尼酱要吃饭呢，要洗澡呢，还是要先吃我呢"),Face(faceId=111)]))
         else:
             await app.sendGroupMessage(group,MessageChain.create([Plain("hi？")]))
 
@@ -58,7 +62,10 @@ async def group_message_handler(app: GraiaMiraiApplication, message: MessageChai
 
     if message.asDisplay().startswith("BV"):
         videoInformation = bvcrawler(message.asDisplay())
-        await app.sendGroupMessage(group,MessageChain.create([Plain(videoInformation['data'])]))
+        await app.sendGroupMessage(group,MessageChain.create([Plain(videoInformation)]))
+    elif message.asDisplay().startswith("AV") or message.asDisplay().startswith("av"):
+        videoInformation = avcrawler(message.asDisplay())
+        await app.sendGroupMessage(group,MessageChain.create([Plain(videoInformation)]))
 
 
         
