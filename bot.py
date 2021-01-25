@@ -45,6 +45,14 @@ async def friend_message_listener(app: GraiaMiraiApplication, friend: Friend):
 
 @bcc.receiver(GroupMessage)
 async def group_message_handler(app: GraiaMiraiApplication, message: MessageChain, group: Group, member: Member):
+    if message.asDisplay() == "help":
+        sstr = "目前已经公开的功能有：" + "\n"
+        sstr += "打招呼功能，输入hi说不定可以得到妹妹的回应哦~" + "\n"
+        sstr += "查bv号和av号的功能，能够显示视频的详细信息~" + "\n"
+        sstr += "随机提供涩图的功能，输入‘色图时间’或者‘来点涩图’就可以随机发送一张图片了~" + "\n"
+        sstr += "凛夜sama赛高！（不要忘了所有的功能都是凛夜亲手敲的代码哦）" + "\n"
+        await app.sendGroupMessage(group,MessageChain.create([Plain(sstr)]))
+
     if message.asDisplay() == "hi":
         if(member.id == 5980403):
             await app.sendGroupMessage(group,MessageChain.create([At(5980403),Plain(" 哥哥爱死你了mua")]))
@@ -67,13 +75,13 @@ async def group_message_handler(app: GraiaMiraiApplication, message: MessageChai
         videoInformation = avcrawler(message.asDisplay())
         await app.sendGroupMessage(group,MessageChain.create([Plain(videoInformation)]))
 
-    if message.asDisplay() == "色图时间":
+    if message.asDisplay() == "色图时间" or message.asDisplay() == "来点涩图":
         url = "https://api.nmb.show/1985acg.php"
 
         try:
             await app.sendGroupMessage(group, MessageChain.create([Image.fromNetworkAddress(url)]))
         except:
-            await app.sendGroupMessage(group,MessageChain.create([Plain("无法连接")]))
+            await app.sendGroupMessage(group,MessageChain.create([Plain("该图片无法显示qwq"),Face(faceId=107)]))
 
 
 app.launch_blocking()
