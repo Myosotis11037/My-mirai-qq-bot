@@ -58,6 +58,12 @@ async def group_message_handler(app: GraiaMiraiApplication, message: MessageChai
             await app.sendGroupMessage(group,MessageChain.create([At(744938425),Plain(" 欧尼酱要吃饭呢，要洗澡呢，还是要先吃我呢"),Face(faceId=111)]))
         else:
             await app.sendGroupMessage(group,MessageChain.create([Plain("hi？")]))
+    
+    if message.asDisplay() == "晚安":
+        if(member.id == 5980403):
+            await app.sendGroupMessage(group,MessageChain.create([At(5980403),Plain(" 哥哥晚安"),Face(faceId=75)]))
+        else:
+            await app.sendGroupMessage(group,MessageChain.create([At(member.id),Plain(" 晚安~")]))
 
     if message.asDisplay() == "草" or message.asDisplay() == "艹":
         await app.sendGroupMessage(group,MessageChain.create([Plain("草")]))
