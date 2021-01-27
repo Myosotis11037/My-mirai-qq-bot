@@ -23,6 +23,7 @@ from graia.broadcast.interrupt.waiter import Waiter
 
 from function.bilibili import bvcrawler
 from function.bilibili import avcrawler
+from function.time import bell,clock
 
 loop = asyncio.get_event_loop()
 
@@ -83,6 +84,11 @@ async def group_message_handler(app: GraiaMiraiApplication, message: MessageChai
             await app.sendGroupMessage(group, MessageChain.create([Image.fromNetworkAddress(url)]))
         except:
             await app.sendGroupMessage(group,MessageChain.create([Plain("该图片无法显示qwq"),Face(faceId=107)]))
+
+
+@bcc.receiver(ApplicationLaunched)
+async def repeat(app:GraiaMiraiApplication):
+    asyncio.create_task(clock(app))
 
 
 app.launch_blocking()
