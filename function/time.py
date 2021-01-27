@@ -2,11 +2,22 @@ import asyncio
 import datetime
 from datetime import date
 
+from graia.application import GraiaMiraiApplication, Session
+from graia.application.entry import (BotMuteEvent, FriendMessage, GroupMessage,
+                                     MemberMuteEvent, MemberUnmuteEvent)
+from graia.application.event.lifecycle import ApplicationLaunched
+from graia.application.event.messages import TempMessage
+from graia.application.event.mirai import BotLeaveEventKick
+from graia.application.friend import Friend
+from graia.application.group import Group, Member
 from graia.application.message.chain import MessageChain
-from graia.application.message.elements.internal import Plain
+from graia.application.message.elements.internal import At, Image, Plain, Quote,Face
+from graia.broadcast import Broadcast
+from graia.broadcast.interrupt import InterruptControl
+from graia.broadcast.interrupt.waiter import Waiter
 
 async def bell(app):
-    group = [766517688,862315052]
+    group = [766517688,862315052,875626950]
     h = datetime.datetime.now().hour
     msg = ' '
     if h == 7:
@@ -23,7 +34,7 @@ async def bell(app):
     if msg == ' ':
         return
     for numbers in group:
-        await sendGroupMessage(numbers,MessageChain.create([Plain(msg)]))
+        await app.sendGroupMessage(numbers,MessageChain.create([Plain(msg)]))
 
 
 async def clock(app):
