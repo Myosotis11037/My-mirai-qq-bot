@@ -24,18 +24,9 @@ def Touhou():
         Main = Information['data']['list'][0]
         videos = Main['items']
         sstr = "车万区周榜（每30分钟更新一次）：\n"
+        shuzi = ["一","二","三","四","五","六","七","八","九","十"]
         for i in range(0,10):
-            if i == 0: shuzi = "一"
-            elif i == 1: shuzi = "二"
-            elif i == 2: shuzi = "三"
-            elif i == 3: shuzi = "四"
-            elif i == 4: shuzi = "五"
-            elif i == 5: shuzi = "六"
-            elif i == 6: shuzi = "七"
-            elif i == 7: shuzi = "八"
-            elif i == 8: shuzi = "九"
-            elif i == 9: shuzi = "十"
-            sstr = sstr + "第" + shuzi + "名：" + videos[i]['name'] + "\n"
+            sstr = sstr + "第" + shuzi[i] + "名：" + videos[i]['name'] + "\n"
             sstr = sstr + "up主：" + videos[i]['author_name'] + "\n"
             sstr = sstr + "bv号：" + videos[i]['bvid'] + "\n"
             sstr = sstr + "视频时长：" + videos[i]['duration'] + "\n"
