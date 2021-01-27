@@ -45,6 +45,7 @@ async def group_message_handler(app: GraiaMiraiApplication, message: MessageChai
         sstr += "①打招呼功能，输入hi说不定可以得到妹妹的回应哦~" + "\n\n"
         sstr += "②查bv号和av号的功能，能够显示视频的详细信息~" + "\n\n"
         sstr += "③随机提供涩图的功能，输入‘色图时间’或者‘来点涩图’就可以随机发送一张图片了~" + "\n\n"
+        sstr += "④整点报时功能~\n"
         sstr += "凛夜sama赛高！（不要忘了所有的功能都是凛夜亲手敲的代码哦）"
         await app.sendGroupMessage(group,MessageChain.create([Plain(sstr)]))
 
