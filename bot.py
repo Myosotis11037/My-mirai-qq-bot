@@ -25,6 +25,7 @@ from function.bilibili import bvcrawler
 from function.bilibili import avcrawler
 from function.time import bell,clock
 from function.touhou import Touhou
+from function.blhx import blhx
 
 loop = asyncio.get_event_loop()
 
@@ -61,7 +62,7 @@ async def group_message_handler(app: GraiaMiraiApplication, message: MessageChai
         elif(member.id == 744938425):
             await app.sendGroupMessage(group,MessageChain.create([At(744938425),Plain(" 欧尼酱要吃饭呢，要洗澡呢，还是要先吃我呢"),Face(faceId=111)]))
         else:
-            await app.sendGroupMessage(group,MessageChain.create([Plain("hi？")]))
+            await app.sendGroupMessage(group,MessageChain.create([At(member.id),Plain("hi~")]))
     
     if message.asDisplay() == "晚安":
         if(member.id == 5980403):
@@ -91,6 +92,16 @@ async def group_message_handler(app: GraiaMiraiApplication, message: MessageChai
     if message.asDisplay() == "车万周榜" or message.asDisplay() == "东方周榜":
         msg = Touhou()
         await app.sendGroupMessage(group,MessageChain.create([Plain(msg)]))
+    
+    if message.asDisplay() == "维护" and member.id == 5980403:
+        msg = "就算是机器人的妹妹我也要休息了呢qwq，凛夜哥哥要对我进行功能维护了，大家好好期待吧"
+        groups = [372733015,766517688,875626950,862315052]
+        for group in groups:
+            await app.sendGroupMessage(group,MessageChain.create([Plain(msg)]))
+
+    if message.asDisplay() == "碧蓝航线最新动态":
+        msgDict = blhx()
+        await app.sendGroupMessage(group,MessageChain.create([Plain(msgDict['information']),Image.fromNetworkAddress(msgDict['picture_url'])]))
 
 
 @bcc.receiver(ApplicationLaunched)

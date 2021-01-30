@@ -34,7 +34,6 @@ def bvcrawler(bv):
     favourite = information['data']['stat']['favorite']
     coin = information['data']['stat']['coin']
     share = information['data']['stat']['share']
-    his_rank = information['data']['stat']['his_rank']
     like = information['data']['stat']['like']
 
     av = dec(bv)
@@ -50,7 +49,6 @@ def bvcrawler(bv):
     sstr = sstr + "收藏数：" + str(favourite) + "\n"
     sstr = sstr + "投币数：" + str(coin) + "\n"
     sstr = sstr + "分享数：" + str(share) + "\n"
-    sstr = sstr + "历史最高排行：" + str(his_rank) + "\n"
     sstr = sstr + "获赞数：" + str(like) + "\n\n"
 
     lianjie = "http://www.bilibili.com/video/" + bv
