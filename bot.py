@@ -26,6 +26,7 @@ from function.bilibili import avcrawler
 from function.time import bell,clock
 from function.touhou import Touhou
 from function.blhx import blhx
+from function.blhx import blhxpush
 
 loop = asyncio.get_event_loop()
 
@@ -48,7 +49,8 @@ async def group_message_handler(app: GraiaMiraiApplication, message: MessageChai
         sstr += "②查bv号和av号的功能，能够显示视频的详细信息~" + "\n\n"
         sstr += "③随机提供涩图的功能，输入‘色图时间’或者‘来点涩图’就可以随机发送一张图片了~" + "\n\n"
         sstr += "④整点报时功能~\n\n"
-        sstr += "⑤提供b站车万区周榜功能~\n"
+        sstr += "⑤提供b站车万区周榜功能~\n\n"
+        sstr += "⑥碧蓝航线实时推送功能，并且输入'碧蓝航线最新动态'可以得到碧蓝航线官方账号发送的最新动态哦~\n"
         sstr += "凛夜sama赛高！（不要忘了所有的功能都是凛夜亲手敲的代码哦）"
         await app.sendGroupMessage(group,MessageChain.create([Plain(sstr)]))
 
@@ -101,12 +103,17 @@ async def group_message_handler(app: GraiaMiraiApplication, message: MessageChai
 
     if message.asDisplay() == "碧蓝航线最新动态":
         msgDict = blhx()
-        await app.sendGroupMessage(group,MessageChain.create([Plain(msgDict['information']),Image.fromNetworkAddress(msgDict['picture_url'])]))
+        if msgDict['picture_url'] != ' ':
+            await app.sendGroupMessage(group,MessageChain.create([Plain(msgDict['information']),Image.fromNetworkAddress(msgDict['picture_url'])]))
+        else:
+            await app.sendGroupMessage(group,MessageChain.create([Plain(msgDict['information'])]))
 
 
 @bcc.receiver(ApplicationLaunched)
 async def repeat(app:GraiaMiraiApplication):
     asyncio.create_task(clock(app))
+    asyncio.create_task(blhxpush(app))
+    
 
 
 app.launch_blocking()
