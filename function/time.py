@@ -17,7 +17,7 @@ from graia.broadcast.interrupt import InterruptControl
 from graia.broadcast.interrupt.waiter import Waiter
 
 async def bell(app):
-    group = [766517688,862315052,875626950]
+    group = [766517688,862315052,875626950,729801800]
     h = datetime.datetime.now().hour
     msg = ' '
     if h == 7:

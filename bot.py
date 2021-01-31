@@ -6,6 +6,8 @@ import random
 import requests
 from re import escape
 from typing import Dict, Optional
+from fake_useragent import UserAgent
+from faker import Faker
 
 from graia.application import GraiaMiraiApplication, Session
 from graia.application.entry import (BotMuteEvent, FriendMessage, GroupMessage,
@@ -13,6 +15,7 @@ from graia.application.entry import (BotMuteEvent, FriendMessage, GroupMessage,
 from graia.application.event.lifecycle import ApplicationLaunched
 from graia.application.event.messages import TempMessage
 from graia.application.event.mirai import BotLeaveEventKick
+
 from graia.application.friend import Friend
 from graia.application.group import Group, Member
 from graia.application.message.chain import MessageChain
@@ -96,7 +99,7 @@ async def group_message_handler(app: GraiaMiraiApplication, message: MessageChai
         await app.sendGroupMessage(group,MessageChain.create([Plain(msg)]))
     
     if message.asDisplay() == "维护" and member.id == 5980403:
-        msg = "就算是机器人的妹妹我也要休息了呢qwq，凛夜哥哥要对我进行功能维护了，大家好好期待吧"
+        msg = "就算是机器人的妹妹我也要休息了呢qwq，凛夜哥哥要对我进行功能维护了，大家好好期待吧~"
         groups = [372733015,766517688,875626950,862315052]
         for group in groups:
             await app.sendGroupMessage(group,MessageChain.create([Plain(msg)]))
@@ -109,10 +112,20 @@ async def group_message_handler(app: GraiaMiraiApplication, message: MessageChai
             await app.sendGroupMessage(group,MessageChain.create([Plain(msgDict['information'])]))
 
 
+
+ua = Faker()
+headers = {'User-Agent': str(ua.user_agent)}
+global null
+null = ''
+groups = [372733015,875626950,766517688,862315052,729801800]
+
 @bcc.receiver(ApplicationLaunched)
 async def repeat(app:GraiaMiraiApplication):
     asyncio.create_task(clock(app))
-    asyncio.create_task(blhxpush(app))
+    blhxurl = "https://api.vc.bilibili.com/dynamic_svr/v1/dynamic_svr/space_history?visitor_uid=33091201&host_uid=233114659&offset_dynamic_id=0&need_top=1&platform=web"
+    Information = requests.get(blhxurl,headers = headers).json()
+    preTimestamp = Information['data']['cards'][1]['desc']['timestamp']
+    asyncio.create_task(blhxpush(app,preTimestamp))
     
 
 

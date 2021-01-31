@@ -24,7 +24,7 @@ ua = Faker()
 headers = {'User-Agent': str(ua.user_agent)}
 global null
 null = ''
-groups = [372733015,875626950,766517688,862315052]
+groups = [372733015,875626950,766517688,862315052,729801800]
 
 def blhx():
     url = "https://api.vc.bilibili.com/dynamic_svr/v1/dynamic_svr/space_history?visitor_uid=33091201&host_uid=233114659&offset_dynamic_id=0&need_top=1&platform=web"
@@ -49,7 +49,7 @@ def blhx():
         pictures = " "
         return {"information":dictInformation['item']['content'],"picture_url":pictures}
     
-async def blhxpush(app):
+async def blhxpush(app,preTimestamp):
     await asyncio.sleep(10)
     url = "https://api.vc.bilibili.com/dynamic_svr/v1/dynamic_svr/space_history?visitor_uid=33091201&host_uid=233114659&offset_dynamic_id=0&need_top=1&platform=web"
     Information = requests.get(url,headers = headers).json()
@@ -64,11 +64,12 @@ async def blhxpush(app):
             timestamp = 0
         print("当前时间戳为：")
         print(t)
-        print("最新动态的时间戳为：")
+        print("上一个动态的时间戳为：")
+        print(preTimestamp)
+        print("当前动态的时间戳为：")
         print(timestamp)
-        print("两者差值为：")
-        print(t - timestamp)
-        if t - timestamp <= 66:
+        if preTimestamp != timestamp:
+            preTimestamp = timestamp
             judge = Information['data']['cards'][1]
             if judge['desc']['type'] == 2:
                 needInformation = Information['data']['cards'][1]['card']
@@ -94,7 +95,7 @@ async def blhxpush(app):
                     if msgDict['picture_url'] != ' ':
                         await app.sendGroupMessage(group,MessageChain.create([Plain(msgDict['information']),Image.fromNetworkAddress(msgDict['picture_url'])]))
                     else:
-                        await app.sendGroupMessage(group,MessageChain.create([Plain(msgDict['0information'])]))
+                        await app.sendGroupMessage(group,MessageChain.create([Plain(msgDict['information'])]))
 
             await asyncio.sleep(60)
 
