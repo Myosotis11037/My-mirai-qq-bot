@@ -62,8 +62,13 @@ async def blhxpush(app):
             timestamp = Information['data']['cards'][1]['desc']['timestamp']
         except:
             timestamp = 0
+        print("当前时间戳为：")
+        print(t)
+        print("最新动态的时间戳为：")
+        print(timestamp)
+        print("两者差值为：")
+        print(t - timestamp)
         if t - timestamp <= 66:
-            print(t - timestamp)
             judge = Information['data']['cards'][1]
             if judge['desc']['type'] == 2:
                 needInformation = Information['data']['cards'][1]['card']
@@ -89,10 +94,11 @@ async def blhxpush(app):
                     if msgDict['picture_url'] != ' ':
                         await app.sendGroupMessage(group,MessageChain.create([Plain(msgDict['information']),Image.fromNetworkAddress(msgDict['picture_url'])]))
                     else:
-                        await app.sendGroupMessage(group,MessageChain.create([Plain(msgDict['information'])]))
+                        await app.sendGroupMessage(group,MessageChain.create([Plain(msgDict['0information'])]))
+
+            await asyncio.sleep(60)
 
         else:
-            print(t - timestamp)
             await asyncio.sleep(60)
             continue
         
