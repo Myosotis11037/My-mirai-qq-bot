@@ -82,9 +82,9 @@ async def blhxpush(app,preTimestamp):
                 msgDict = {"information":dictInformation['item']['description'],"picture_url":pictures}
                 for group in groups:
                     if msgDict['picture_url'] != ' ':
-                        await app.sendGroupMessage(group,MessageChain.create([Plain(msgDict['information']),Image.fromNetworkAddress(msgDict['picture_url'])]))
+                        await app.sendGroupMessage(group,MessageChain.create([Plain("碧蓝航线b服动态更新\n============="),Plain(msgDict['information']),Image.fromNetworkAddress(msgDict['picture_url'])]))
                     else:
-                        await app.sendGroupMessage(group,MessageChain.create([Plain(msgDict['information'])]))
+                        await app.sendGroupMessage(group,MessageChain.create([Plain("碧蓝航线b服动态更新\n============="),Plain(msgDict['information'])]))
 
             elif judge['desc']['type'] == 4:
                 needInformation = Information['data']['cards'][1]['card']
@@ -93,9 +93,9 @@ async def blhxpush(app,preTimestamp):
                 msgDict = {"information":dictInformation['item']['content'],"picture_url":pictures}
                 for group in groups:
                     if msgDict['picture_url'] != ' ':
-                        await app.sendGroupMessage(group,MessageChain.create([Plain(msgDict['information']),Image.fromNetworkAddress(msgDict['picture_url'])]))
+                        await app.sendGroupMessage(group,MessageChain.create([Plain("碧蓝航线b服动态更新\n============="),Plain(msgDict['information']),Image.fromNetworkAddress(msgDict['picture_url'])]))
                     else:
-                        await app.sendGroupMessage(group,MessageChain.create([Plain(msgDict['information'])]))
+                        await app.sendGroupMessage(group,MessageChain.create([Plain("碧蓝航线b服动态更新\n============="),Plain(msgDict['information'])]))
 
             await asyncio.sleep(60)
 
