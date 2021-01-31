@@ -17,14 +17,14 @@ from graia.application.message.chain import MessageChain
 from graia.application.message.elements.internal import Plain
 from graia.broadcast.interrupt.waiter import Waiter
 
-headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:40.0) Gecko/20100101 Firefox/40.1',}
+headers = {
+    'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:40.0) Gecko/20100101 Firefox/40.1', }
 
 
 def bvcrawler(bv):
 
-
     url = "http://api.bilibili.com/x/web-interface/view?bvid=" + bv
-    information = requests.get(url,headers=headers).json()
+    information = requests.get(url, headers=headers).json()
     title = information['data']['title']
     AV = information['data']['aid']
     BV = information['data']['bvid']
@@ -35,12 +35,15 @@ def bvcrawler(bv):
     coin = information['data']['stat']['coin']
     share = information['data']['stat']['share']
     like = information['data']['stat']['like']
+    cover_url = information['data']['pic']
 
     av = dec(bv)
-    url = "https://api.bilibili.com/x/web-interface/archive/desc?aid=" + str(av) + "&page="
+    url = "https://api.bilibili.com/x/web-interface/archive/desc?aid=" + \
+        str(av) + "&page="
     prefile = requests.get(url, headers=headers).json()
 
-    sstr = "标题：" + str(title) + "\n" + "AV号：AV" + str(AV) + " BV号：" + str(BV) + "\n"
+    sstr = "标题：" + str(title) + "\n" + "AV号：AV" + \
+        str(AV) + " BV号：" + str(BV) + "\n"
     sstr = sstr + "\n" + "视频简介：\n" + prefile['data']
 
     sstr = sstr + "\n\n" + "播放量：" + str(view) + "\n"
@@ -54,14 +57,13 @@ def bvcrawler(bv):
     lianjie = "http://www.bilibili.com/video/" + bv
     sstr = sstr + "视频链接：\n" + lianjie
 
-
-    return sstr
+    return {"information": sstr, "cover_url": cover_url}
 
 
 def avcrawler(av):
     av = av[2:]
     url = "http://api.bilibili.com/x/web-interface/view?aid=" + av
-    information = requests.get(url,headers=headers).json()
+    information = requests.get(url, headers=headers).json()
     title = information['data']['title']
     AV = information['data']['aid']
     BV = information['data']['bvid']
@@ -73,11 +75,14 @@ def avcrawler(av):
     share = information['data']['stat']['share']
     his_rank = information['data']['stat']['his_rank']
     like = information['data']['stat']['like']
+    cover_url = information['data']['pic']
 
-    url = "https://api.bilibili.com/x/web-interface/archive/desc?aid=" + str(av) + "&page="
+    url = "https://api.bilibili.com/x/web-interface/archive/desc?aid=" + \
+        str(av) + "&page="
     prefile = requests.get(url, headers=headers).json()
 
-    sstr = "标题：" + str(title) + "\n" + "AV号：AV" + str(AV) + " BV号：" + str(BV) + "\n"
+    sstr = "标题：" + str(title) + "\n" + "AV号：AV" + \
+        str(AV) + " BV号：" + str(BV) + "\n"
     sstr = sstr + "\n" + "视频简介：\n" + prefile['data']
 
     sstr = sstr + "\n\n" + "播放量：" + str(view) + "\n"
@@ -92,9 +97,7 @@ def avcrawler(av):
     lianjie = "http://www.bilibili.com/video/av" + av
     sstr = sstr + "视频链接：\n" + lianjie
 
-
-    return sstr
-
+    return {"information": sstr, "cover_url": cover_url}
 
 
 table = 'fZodR9XQDSUm21yCkr6zBqiveYah8bt4xsWpHnJE7jL5VG3guMTKNPAwcF'
@@ -112,4 +115,3 @@ def dec(x):
     for i in range(6):
         r += tr[x[s[i]]]*58**i
     return (r-add) ^ xor
-

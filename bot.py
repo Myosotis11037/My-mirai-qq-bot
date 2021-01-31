@@ -81,10 +81,10 @@ async def group_message_handler(app: GraiaMiraiApplication, message: MessageChai
     if(member.id != 2083664136 and member.id != 2079373402):
         if message.asDisplay().startswith("BV"):
             videoInformation = bvcrawler(message.asDisplay())
-            await app.sendGroupMessage(group,MessageChain.create([Plain(videoInformation)]))
+            await app.sendGroupMessage(group,MessageChain.create([Image.fromNetworkAddress(videoInformation['cover_url']),Plain(videoInformation['information'])]))
         elif message.asDisplay().startswith("AV") or message.asDisplay().startswith("av"):
             videoInformation = avcrawler(message.asDisplay())
-            await app.sendGroupMessage(group,MessageChain.create([Plain(videoInformation)]))
+            await app.sendGroupMessage(group,MessageChain.create([Image.fromNetworkAddress(videoInformation['cover_url']),Plain(videoInformation['information'])]))
 
     if message.asDisplay() == "色图时间" or message.asDisplay() == "来点涩图" or message.asDisplay() == "来点色图":
         url = "https://api.nmb.show/1985acg.php"
@@ -100,9 +100,16 @@ async def group_message_handler(app: GraiaMiraiApplication, message: MessageChai
     
     if message.asDisplay() == "维护" and member.id == 5980403:
         msg = "就算是机器人的妹妹我也要休息了呢qwq，凛夜哥哥要对我进行功能维护了，大家好好期待吧~"
-        groups = [372733015,766517688,875626950,862315052]
+        groups = [372733015,766517688,875626950,862315052,729801800]
         for group in groups:
             await app.sendGroupMessage(group,MessageChain.create([Plain(msg)]))
+    
+    if message.asDisplay() == "停止维护" and member.id == 5980403:
+        msg = "凛夜哥哥对我的维护已经结束了，我又可以继续被大家正常使用了呢~（羞涩）"
+        groups = [372733015,766517688,875626950,862315052,729801800]
+        for group in groups:
+            await app.sendGroupMessage(group,MessageChain.create([Plain(msg)]))
+
 
     if message.asDisplay() == "碧蓝航线最新动态":
         msgDict = blhx()
