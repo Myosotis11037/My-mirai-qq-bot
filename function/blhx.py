@@ -24,7 +24,7 @@ ua = Faker()
 headers = {'User-Agent': str(ua.user_agent)}
 global null
 null = ''
-groups = [372733015,875626950,766517688,862315052,729801800]
+groups = [372733015,875626950,862315052,729801800,598418410]
 
 def blhx():
     url = "https://api.vc.bilibili.com/dynamic_svr/v1/dynamic_svr/space_history?visitor_uid=33091201&host_uid=233114659&offset_dynamic_id=0&need_top=1&platform=web"
@@ -82,9 +82,9 @@ async def blhxpush(app,preTimestamp):
                 msgDict = {"information":dictInformation['item']['description'],"picture_url":pictures}
                 for group in groups:
                     if msgDict['picture_url'] != ' ':
-                        await app.sendGroupMessage(group,MessageChain.create([Plain("碧蓝航线b服动态更新\n============="),Plain(msgDict['information']),Image.fromNetworkAddress(msgDict['picture_url'])]))
+                        await app.sendGroupMessage(group,MessageChain.create([Plain("碧蓝航线b服动态更新\n================\n"),Plain(msgDict['information']),Image.fromNetworkAddress(msgDict['picture_url'])]))
                     else:
-                        await app.sendGroupMessage(group,MessageChain.create([Plain("碧蓝航线b服动态更新\n============="),Plain(msgDict['information'])]))
+                        await app.sendGroupMessage(group,MessageChain.create([Plain("碧蓝航线b服动态更新\n================\n"),Plain(msgDict['information'])]))
 
             elif judge['desc']['type'] == 4:
                 needInformation = Information['data']['cards'][1]['card']
@@ -93,9 +93,9 @@ async def blhxpush(app,preTimestamp):
                 msgDict = {"information":dictInformation['item']['content'],"picture_url":pictures}
                 for group in groups:
                     if msgDict['picture_url'] != ' ':
-                        await app.sendGroupMessage(group,MessageChain.create([Plain("碧蓝航线b服动态更新\n============="),Plain(msgDict['information']),Image.fromNetworkAddress(msgDict['picture_url'])]))
+                        await app.sendGroupMessage(group,MessageChain.create([Plain("碧蓝航线b服动态更新\n================\n"),Plain(msgDict['information']),Image.fromNetworkAddress(msgDict['picture_url'])]))
                     else:
-                        await app.sendGroupMessage(group,MessageChain.create([Plain("碧蓝航线b服动态更新\n============="),Plain(msgDict['information'])]))
+                        await app.sendGroupMessage(group,MessageChain.create([Plain("碧蓝航线b服动态更新\n================\n"),Plain(msgDict['information'])]))
 
             await asyncio.sleep(60)
 

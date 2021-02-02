@@ -46,6 +46,17 @@ app = GraiaMiraiApplication(
 
 @bcc.receiver(GroupMessage)
 async def group_message_handler(app: GraiaMiraiApplication, message: MessageChain, group: Group, member: Member):
+    if message.has(At):
+        flag = 0
+        for at in message.get(At):
+            if at.target == 5980403:
+                flag = 1
+        if flag == 0:
+            return
+        else:
+            await app.sendFriendMessage(5980403,MessageChain.create([Plain("消息监听：\n%s（%d）在群%s（%d）中对我说：\n%s" % (member.name,member.id,group.name,group.id,message.asDisplay()))]))
+
+
     if message.asDisplay() == "help":
         sstr = "目前已经公开的功能有：" + "\n\n" 
         sstr += "①打招呼功能，输入hi说不定可以得到妹妹的回应哦~" + "\n\n"
@@ -117,6 +128,7 @@ async def group_message_handler(app: GraiaMiraiApplication, message: MessageChai
             await app.sendGroupMessage(group,MessageChain.create([Plain(msgDict['information']),Image.fromNetworkAddress(msgDict['picture_url'])]))
         else:
             await app.sendGroupMessage(group,MessageChain.create([Plain(msgDict['information'])]))
+
 
 
 
