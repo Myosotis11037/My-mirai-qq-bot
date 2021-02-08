@@ -54,7 +54,18 @@ async def group_message_handler(app: GraiaMiraiApplication, message: MessageChai
         if flag == 0:
             return
         else:
-            await app.sendFriendMessage(5980403,MessageChain.create([Plain("消息监听：\n%s（%d）在群%s（%d）中对我说：\n%s" % (member.name,member.id,group.name,group.id,message.asDisplay()))]))
+            msg = message.asSerializationString()
+            message_a = MessageChain.create([Plain("消息监听：\n%s（%d）在群%s（%d）中对我说：\n%s" % (member.name,member.id,group.name,group.id,message.asDisplay()))])
+            message_b = message.asSendable()
+            message_a.plus(message_b)
+            for i in range(0, len(message_a.__root__)):
+                if message_a.__root__[i].type == 'At':
+                    message_a.__root__[i] = Plain(
+                        message_a.__root__[i].display)
+
+            
+            await app.sendFriendMessage(5980403,message_a)
+
 
 
     if message.asDisplay() == "help":
@@ -65,7 +76,7 @@ async def group_message_handler(app: GraiaMiraiApplication, message: MessageChai
         sstr += "④整点报时功能~\n\n"
         sstr += "⑤提供b站车万区周榜功能~\n\n"
         sstr += "⑥碧蓝航线实时推送功能，并且输入'碧蓝航线最新动态'可以得到碧蓝航线官方账号发送的最新动态哦~\n"
-        sstr += "凛夜sama赛高！（不要忘了所有的功能都是凛夜亲手敲的代码哦）"
+        sstr += "凛夜sama赛高！（不要忘了所有的功能都是凛夜亲手敲的代码哦）"    
         await app.sendGroupMessage(group,MessageChain.create([Plain(sstr)]))
 
     if message.asDisplay() == "hi":
@@ -123,11 +134,16 @@ async def group_message_handler(app: GraiaMiraiApplication, message: MessageChai
 
 
     if message.asDisplay() == "碧蓝航线最新动态":
-        msgDict = blhx()
-        if msgDict['picture_url'] != ' ':
-            await app.sendGroupMessage(group,MessageChain.create([Plain(msgDict['information']),Image.fromNetworkAddress(msgDict['picture_url'])]))
-        else:
-            await app.sendGroupMessage(group,MessageChain.create([Plain(msgDict['information'])]))
+        await blhx(app,group)
+
+    if message.asDisplay() == "lex凉了没":
+        lexurl = "https://api.bilibili.com/x/relation/stat?vmid=777536"
+        headers = {
+    'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:40.0) Gecko/20100101 Firefox/40.1', }
+        msg = requests.get(lexurl, headers = headers).json()
+        followers = msg['data']['follower']
+        string = "lex的粉丝数已经掉到" + str(followers) + "了~"
+        await app.sendGroupMessage(group,MessageChain.create([Plain(string)]))
 
 
 

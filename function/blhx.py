@@ -15,7 +15,7 @@ from graia.application.event.mirai import BotLeaveEventKick
 from graia.application.friend import Friend
 from graia.application.group import Group, Member
 from graia.application.message.chain import MessageChain
-from graia.application.message.elements.internal import At, Image, Plain, Quote,Face
+from graia.application.message.elements.internal import At, Image, Plain, Quote, Face
 from graia.broadcast import Broadcast
 from graia.broadcast.interrupt import InterruptControl
 from graia.broadcast.interrupt.waiter import Waiter
@@ -24,30 +24,61 @@ ua = Faker()
 headers = {'User-Agent': str(ua.user_agent)}
 global null
 null = ''
-groups = [372733015,875626950,862315052,729801800,598418410]
+groups = [372733015, 875626950, 862315052, 729801800, 598418410]
 
-def blhx():
+
+async def blhx(app,group):
     url = "https://api.vc.bilibili.com/dynamic_svr/v1/dynamic_svr/space_history?visitor_uid=33091201&host_uid=233114659&offset_dynamic_id=0&need_top=1&platform=web"
-    Information = requests.get(url,headers = headers).json()
+    Information = requests.get(url, headers=headers).json()
     judge = Information['data']['cards'][1]
 
-    if judge['desc']['type'] == 2:
+    if judge['desc']['type'] == 1:
+        needInformation = Information['data']['cards'][1]['card']
+        dictInformation = eval(needInformation)
+        msg = dictInformation['item']['content']
+        message = MessageChain.create(
+                    [Plain("碧蓝航线b服动态更新\n================\n"), Plain(msg)])
+        await app.sendGroupMessage(group, message)
+
+    elif judge['desc']['type'] == 2:
         needInformation = Information['data']['cards'][1]['card']
         dictInformation = eval(needInformation)
         try:
             if(dictInformation['item']['pictures_count'] == 1):
                 pictures = dictInformation['item']['pictures'][0]['img_src']
-                print(pictures)
+                flag = 0
+            else:
+                pictures = dictInformation['item']['pictures']
+                flag = 1
+                count = dictInformation['item']['pictures_count']
         except:
             pictures = " "
-        return {"information":dictInformation['item']['description'],"picture_url":pictures}
-
+        msgDict = {
+            "information": dictInformation['item']['description'], "picture_url": pictures}
+        if msgDict['picture_url'] != ' ':
+            if flag == 0:
+                await app.sendGroupMessage(group, MessageChain.create([Plain("碧蓝航线b服动态更新\n================\n"), Plain(msgDict['information']), Image.fromNetworkAddress(msgDict['picture_url'])]))
+            elif flag == 1:
+                message1 = MessageChain.create(
+                    [Plain("碧蓝航线b服动态更新\n================\n"), Plain(msgDict['information'])])
+                for i in count:
+                    msg = MessageChain.join(
+                        [Image.fromNetworkAddress(pictures[i]['img_src'])])
+                Msg = MessageChain.join(message1, msg)
+                await app.sendGroupMessage(group, Msg)
+        else:
+            await app.sendGroupMessage(group, MessageChain.create([Plain("碧蓝航线b服动态更新\n================\n"), Plain(msgDict['information'])]))
 
     elif judge['desc']['type'] == 4:
         needInformation = Information['data']['cards'][1]['card']
         dictInformation = eval(needInformation)
         pictures = " "
-        return {"information":dictInformation['item']['content'],"picture_url":pictures}
+        msgDict = {"information":dictInformation['item']['content'],"picture_url":pictures}
+        for group in groups:
+            if msgDict['picture_url'] != ' ':
+                await app.sendGroupMessage(group,MessageChain.create([Plain("碧蓝航线b服动态更新\n================\n"),Plain(msgDict['information']),Image.fromNetworkAddress(msgDict['picture_url'])]))
+            else:
+                await app.sendGroupMessage(group,MessageChain.create([Plain("碧蓝航线b服动态更新\n================\n"),Plain(msgDict['information'])]))
     
 async def blhxpush(app,preTimestamp):
     await asyncio.sleep(10)
@@ -71,18 +102,38 @@ async def blhxpush(app,preTimestamp):
         if preTimestamp != timestamp:
             preTimestamp = timestamp
             judge = Information['data']['cards'][1]
-            if judge['desc']['type'] == 2:
+            if judge['desc']['type'] == 1:
+                needInformation = Information['data']['cards'][1]['card']
+                dictInformation = eval(needInformation)
+                msg = dictInformation['item']['content']
+                message = MessageChain.create(
+                            [Plain("碧蓝航线b服动态更新\n================\n"), Plain(msg)])
+                await app.sendGroupMessage(group, message)
+
+            elif judge['desc']['type'] == 2:
                 needInformation = Information['data']['cards'][1]['card']
                 dictInformation = eval(needInformation)
                 try:
                     if(dictInformation['item']['pictures_count'] == 1):
                         pictures = dictInformation['item']['pictures'][0]['img_src']
+                        flag = 0
+                    else:
+                        pictures = dictInformation['item']['pictures']
+                        flag = 1
+                        count = dictInformation['item']['pictures_count']
                 except:
                     pictures = " "
                 msgDict = {"information":dictInformation['item']['description'],"picture_url":pictures}
                 for group in groups:
                     if msgDict['picture_url'] != ' ':
-                        await app.sendGroupMessage(group,MessageChain.create([Plain("碧蓝航线b服动态更新\n================\n"),Plain(msgDict['information']),Image.fromNetworkAddress(msgDict['picture_url'])]))
+                        if flag == 0:
+                            await app.sendGroupMessage(group,MessageChain.create([Plain("碧蓝航线b服动态更新\n================\n"),Plain(msgDict['information']),Image.fromNetworkAddress(msgDict['picture_url'])]))
+                        elif flag == 1:
+                            message1 = MessageChain.create([Plain("碧蓝航线b服动态更新\n================\n"),Plain(msgDict['information'])])
+                            for i in count:
+                                msg = MessageChain.join([Image.fromNetworkAddress(pictures[i]['img_src'])])
+                            Msg = MessageChain.join(message1,msg)
+                            await app.sendGroupMessage(group,Msg)
                     else:
                         await app.sendGroupMessage(group,MessageChain.create([Plain("碧蓝航线b服动态更新\n================\n"),Plain(msgDict['information'])]))
 

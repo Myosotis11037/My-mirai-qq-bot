@@ -60,4 +60,4 @@ async def clock(app):
                 print("产生秒的时间误差，开始矫正", t)
                 break
             await asyncio.sleep(3600)
-            pass
+            pass    
