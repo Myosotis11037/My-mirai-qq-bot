@@ -102,6 +102,7 @@ async def blhxpush(app,preTimestamp):
         if preTimestamp != timestamp:
             preTimestamp = timestamp
             judge = Information['data']['cards'][1]
+            
             if judge['desc']['type'] == 1:
                 needInformation = Information['data']['cards'][1]['card']
                 dictInformation = eval(needInformation)
