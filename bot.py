@@ -4,6 +4,8 @@ import json
 import operator
 import random
 import requests
+import re
+from lxml import etree
 from re import escape
 from typing import Dict, Optional
 from fake_useragent import UserAgent
@@ -15,11 +17,12 @@ from graia.application.entry import (BotMuteEvent, FriendMessage, GroupMessage,
 from graia.application.event.lifecycle import ApplicationLaunched
 from graia.application.event.messages import TempMessage
 from graia.application.event.mirai import BotLeaveEventKick
+import graia.application.message.elements.internal as Msg_element
 
 from graia.application.friend import Friend
 from graia.application.group import Group, Member
 from graia.application.message.chain import MessageChain
-from graia.application.message.elements.internal import At, Image, Plain, Quote,Face
+from graia.application.message.elements.internal import At, Image, Plain, Quote,Face,Xml
 from graia.broadcast import Broadcast
 from graia.broadcast.interrupt import InterruptControl
 from graia.broadcast.interrupt.waiter import Waiter
@@ -44,8 +47,24 @@ app = GraiaMiraiApplication(
     )
 )
 
+pattern = re.compile(r'BV1[1-9A-NP-Za-km-z]{9}')
 @bcc.receiver(GroupMessage)
 async def group_message_handler(app: GraiaMiraiApplication, message: MessageChain, group: Group, member: Member):
+    if Msg_element.Xml in message:
+        xml_msg = etree.fromstring(message.get(Msg_element.Xml)[0].xml.encode('utf-8'))
+        url = xml_msg.xpath('/msg/@url')[0]
+        result = re.search(pattern, url)
+    else:
+        result = re.search(pattern,message.asDisplay())
+
+    
+    if result != None:
+        BVname = result.group()
+        print(BVname)
+        videoInformation = bvcrawler(BVname)
+        await app.sendGroupMessage(group,MessageChain.create([Image.fromNetworkAddress(videoInformation['cover_url']),Plain(videoInformation['information'])]))
+
+
     if message.has(At):
         flag = 0
         for at in message.get(At):
