@@ -99,7 +99,10 @@ async def group_message_handler(app: GraiaMiraiApplication, message: MessageChai
             await app.sendGroupMessage(group,MessageChain.create([At(member.id),Plain(" 晚安~")]))
 
     if message.asDisplay() == "草" or message.asDisplay() == "艹":
-        await app.sendGroupMessage(group,MessageChain.create([Plain("草")]))
+        if random.random() <= 0.25:
+            await app.sendGroupMessage(group,MessageChain.create([Plain("草")]))
+        else:
+            return
 
     if(member.id != 2083664136 and member.id != 2079373402):
         if message.asDisplay().startswith("BV"):

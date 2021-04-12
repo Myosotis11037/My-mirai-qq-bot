@@ -113,6 +113,7 @@ add = 8728348608
 
 
 def dec(x):
+    
 
     r = 0
     for i in range(6):
