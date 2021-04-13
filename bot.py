@@ -5,6 +5,7 @@ import operator
 import random
 import requests
 import re
+import aiohttp
 from lxml import etree
 from re import escape
 from typing import Dict, Optional
@@ -133,9 +134,11 @@ async def group_message_handler(app: GraiaMiraiApplication, message: MessageChai
 
     if message.asDisplay() == "色图时间" or message.asDisplay() == "来点涩图" or message.asDisplay() == "来点色图":
         url = "https://api.nmb.show/1985acg.php"
-
+        conn=aiohttp.TCPConnector(verify_ssl=False)
+        async with aiohttp.request('GET', url, connector=conn) as resp:
+            content = await resp.read()
         try:
-            await app.sendGroupMessage(group, MessageChain.create([Image.fromNetworkAddress(url)]))
+            await app.sendGroupMessage(group, MessageChain.create([Image.fromUnsafeBytes(content)]))
         except:
             await app.sendGroupMessage(group,MessageChain.create([Plain("该图片无法显示qwq"),Face(faceId=107)]))
 

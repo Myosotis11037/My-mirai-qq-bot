@@ -42,7 +42,7 @@ async def blhx(app,group):
 
     elif judge['desc']['type'] == 2:
         needInformation = Information['data']['cards'][1]['card']
-        dictInformation = eval(needInformation)
+        dictInformation = eval(needInformation) 
         try:
             if(dictInformation['item']['pictures_count'] == 1):
                 pictures = dictInformation['item']['pictures'][0]['img_src']
@@ -61,11 +61,11 @@ async def blhx(app,group):
             elif flag == 1:
                 message1 = MessageChain.create(
                     [Plain("碧蓝航线b服动态更新\n================\n"), Plain(msgDict['information'])])
-                for i in count:
+                for i in range(count):
                     msg = MessageChain.join(
                         [Image.fromNetworkAddress(pictures[i]['img_src'])])
-                Msg = MessageChain.join(message1, msg)
-                await app.sendGroupMessage(group, Msg)
+                #Msg = MessageChain.join(message1, msg)
+                #await app.sendGroupMessage(group, Msg)
         else:
             await app.sendGroupMessage(group, MessageChain.create([Plain("碧蓝航线b服动态更新\n================\n"), Plain(msgDict['information'])]))
 
