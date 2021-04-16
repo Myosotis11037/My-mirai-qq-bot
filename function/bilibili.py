@@ -1,5 +1,5 @@
 import random
-
+import os
 import requests
 from graia.application.event.messages import GroupMessage
 from graia.application.group import Group, Member
@@ -17,12 +17,11 @@ from graia.application.message.chain import MessageChain
 from graia.application.message.elements.internal import Plain
 from graia.broadcast.interrupt.waiter import Waiter
 
-SESSDATA = "2058cc55%2C1625075012%2Ccc2ae*11"
-bili_jct = "165632363f61bf53c903a3eb0c28dbac"
-cookie = "SESSDATA=" + SESSDATA + "; bili_jct=" + bili_jct
+fr = open("./cookie/cookie.txt", encoding='utf-8')
+mycookie = fr.read()
+fr.close()
 headers = {
-    'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:40.0) Gecko/20100101 Firefox/40.1', 'cookie': cookie}
-
+    'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:40.0) Gecko/20100101 Firefox/40.1', 'cookie': str(mycookie)}
 
 def bvcrawler(bv):
 
