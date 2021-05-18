@@ -2,6 +2,7 @@ import random
 import time
 import datetime
 import asyncio
+import urllib
 
 import requests
 from fake_useragent import UserAgent
@@ -57,15 +58,16 @@ async def blhx(app,group):
             "information": dictInformation['item']['description'], "picture_url": pictures}
         if msgDict['picture_url'] != ' ':
             if flag == 0:
+                msgDict['picture_url'] = eval(repr(msgDict['picture_url']).replace('\\',''))
                 await app.sendGroupMessage(group, MessageChain.create([Plain("碧蓝航线b服动态更新\n================\n"), Plain(msgDict['information']), Image.fromNetworkAddress(msgDict['picture_url'])]))
             elif flag == 1:
                 message1 = MessageChain.create(
                     [Plain("碧蓝航线b服动态更新\n================\n"), Plain(msgDict['information'])])
-                for i in count:
+                for i in range(count):
                     msg = MessageChain.join(
                         [Image.fromNetworkAddress(pictures[i]['img_src'])])
-                Msg = MessageChain.join(message1, msg)
-                await app.sendGroupMessage(group, Msg)
+                #Msg = MessageChain.join(message1, msg)
+                #await app.sendGroupMessage(group, Msg)
         else:
             await app.sendGroupMessage(group, MessageChain.create([Plain("碧蓝航线b服动态更新\n================\n"), Plain(msgDict['information'])]))
 
@@ -76,6 +78,7 @@ async def blhx(app,group):
         msgDict = {"information":dictInformation['item']['content'],"picture_url":pictures}
         for group in groups:
             if msgDict['picture_url'] != ' ':
+                msgDict['picture_url'] = eval(repr(msgDict['picture_url']).replace('\\',''))
                 await app.sendGroupMessage(group,MessageChain.create([Plain("碧蓝航线b服动态更新\n================\n"),Plain(msgDict['information']),Image.fromNetworkAddress(msgDict['picture_url'])]))
             else:
                 await app.sendGroupMessage(group,MessageChain.create([Plain("碧蓝航线b服动态更新\n================\n"),Plain(msgDict['information'])]))
@@ -107,9 +110,10 @@ async def blhxpush(app,preTimestamp):
                 needInformation = Information['data']['cards'][1]['card']
                 dictInformation = eval(needInformation)
                 msg = dictInformation['item']['content']
-                message = MessageChain.create(
-                            [Plain("碧蓝航线b服动态更新\n================\n"), Plain(msg)])
-                await app.sendGroupMessage(group, message)
+                for group in groups:
+                    message = MessageChain.create(
+                                [Plain("碧蓝航线b服动态更新\n================\n"), Plain(msg)])
+                    await app.sendGroupMessage(group, message)
 
             elif judge['desc']['type'] == 2:
                 needInformation = Information['data']['cards'][1]['card']
@@ -128,10 +132,12 @@ async def blhxpush(app,preTimestamp):
                 for group in groups:
                     if msgDict['picture_url'] != ' ':
                         if flag == 0:
+                            msgDict['picture_url'] = eval(repr(msgDict['picture_url']).replace('\\',''))
                             await app.sendGroupMessage(group,MessageChain.create([Plain("碧蓝航线b服动态更新\n================\n"),Plain(msgDict['information']),Image.fromNetworkAddress(msgDict['picture_url'])]))
                         elif flag == 1:
                             message1 = MessageChain.create([Plain("碧蓝航线b服动态更新\n================\n"),Plain(msgDict['information'])])
                             for i in count:
+                                pictures[i]['img_src'] = eval(repr(pictures[i]['img_src']).replace('\\',''))
                                 msg = MessageChain.join([Image.fromNetworkAddress(pictures[i]['img_src'])])
                             Msg = MessageChain.join(message1,msg)
                             await app.sendGroupMessage(group,Msg)
@@ -145,6 +151,7 @@ async def blhxpush(app,preTimestamp):
                 msgDict = {"information":dictInformation['item']['content'],"picture_url":pictures}
                 for group in groups:
                     if msgDict['picture_url'] != ' ':
+                        msgDict['picture_url'] = eval(repr(msgDict['picture_url']).replace('\\',''))
                         await app.sendGroupMessage(group,MessageChain.create([Plain("碧蓝航线b服动态更新\n================\n"),Plain(msgDict['information']),Image.fromNetworkAddress(msgDict['picture_url'])]))
                     else:
                         await app.sendGroupMessage(group,MessageChain.create([Plain("碧蓝航线b服动态更新\n================\n"),Plain(msgDict['information'])]))
