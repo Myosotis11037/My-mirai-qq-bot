@@ -28,6 +28,7 @@ async def getlive(app, group, member):
     data = {"room_id": "22431055", "csrf_token": token,
             "csrf": token, "area_v2": "235", "platform": "pc"}
     r = requests.post(url, data, headers=headers)
+    print(r.json())
     addr = r.json()["data"]["rtmp"]["addr"]
     code = r.json()["data"]["rtmp"]["code"]
     if (r.json()["data"]["status"] == "LIVE"):

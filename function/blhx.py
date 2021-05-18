@@ -43,7 +43,7 @@ async def blhx(app,group):
 
     elif judge['desc']['type'] == 2:
         needInformation = Information['data']['cards'][1]['card']
-        dictInformation = eval(needInformation)
+        dictInformation = eval(needInformation) 
         try:
             if(dictInformation['item']['pictures_count'] == 1):
                 pictures = dictInformation['item']['pictures'][0]['img_src']

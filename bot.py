@@ -134,7 +134,7 @@ async def group_message_handler(app: GraiaMiraiApplication, message: MessageChai
         sstr = "目前已经公开的功能有：" + "\n\n" 
         sstr += "①打招呼功能，输入hi说不定可以得到妹妹的回应哦~" + "\n\n"
         sstr += "②查bv号和av号的功能，并且能够解析任何形式分享的b站视频，能够显示视频的详细信息~" + "\n\n"
-        sstr += "③随机提供涩图的功能，输入‘色图时间’或者‘来点涩图’就可以随机发送一张图片了~(输入‘来点车万’可以得到车万图，输入‘来点辉夜’可以获得辉夜图哦)" + "\n\n"
+        sstr += "③随机提供涩图的功能，输入‘色图时间’或者‘来点涩图’就可以随机发送一张图片了~" + "\n\n"
         sstr += "④整点报时功能~\n\n"
         sstr += "⑤提供b站车万区周榜功能~\n\n"
         sstr += "⑥碧蓝航线实时推送功能，并且输入'碧蓝航线最新动态'可以得到碧蓝航线官方账号发送的最新动态哦~\n\n"
@@ -174,27 +174,6 @@ async def group_message_handler(app: GraiaMiraiApplication, message: MessageChai
 
     if message.asDisplay() == "色图时间" or message.asDisplay() == "来点涩图" or message.asDisplay() == "来点色图":
         url = "https://api.nmb.show/1985acg.php"
-        conn=aiohttp.TCPConnector(ssl=False)
-        async with aiohttp.request('GET', url, connector=conn) as resp:
-            content = await resp.read()
-        try:
-            await app.sendGroupMessage(group, MessageChain.create([Image.fromUnsafeBytes(content)]))
-        except:
-            await app.sendGroupMessage(group,MessageChain.create([Plain("该图片无法显示qwq"),Face(faceId=107)]))
-        
-    if message.asDisplay() == "铜图时间" or message.asDisplay() == "来点铜图":
-        url = "https://api.ixiaowai.cn/api/api.php"
-        conn=aiohttp.TCPConnector(ssl=False)
-        async with aiohttp.request('GET', url, connector=conn) as resp:
-            content = await resp.read()
-        try:
-            await app.sendGroupMessage(group, MessageChain.create([Image.fromUnsafeBytes(content)]))
-        except:
-            await app.sendGroupMessage(group,MessageChain.create([Plain("该图片无法显示qwq"),Face(faceId=107)]))
-   
-
-    if message.asDisplay() == "来点车万" or message.asDisplay() == "来点东方" or message.asDisplay() == "东方色图" or message.asDisplay() == "车万色图":
-        url = "https://img.paulzzh.tech/touhou/random"
         conn=aiohttp.TCPConnector(ssl=False)
         async with aiohttp.request('GET', url, connector=conn) as resp:
             content = await resp.read()
@@ -393,7 +372,7 @@ async def group_message_handler(app: GraiaMiraiApplication, message: MessageChai
 
                 
 
-    if (message.asDisplay() == "！白名单" or message.asDisplay() == "查看白名单") and (group.id == 182721157 or group.id == 1158449372 or group.id == 431987102 or group.id == 909918392 or group.id == 372733015) :
+    if (message.asDisplay() == "！白名单" or message.asDisplay() == "查看白名单") and (group.id == 182721157 or group.id == 1158449372 or group.id == 431987102 or group.id == 909918392) :
         IDs = ['0']
         msg_str = "白名单如下：\n"
         with open("./data/authority.txt",encoding = 'utf-8') as auth:
@@ -442,8 +421,7 @@ async def group_message_handler(app: GraiaMiraiApplication, message: MessageChai
                 fr =  open(Localpath, encoding = 'utf-8')
                 live_info = json.load(fr)
                 fr.close()
-                print(member.permission != "MemberPerm.Administrator")
-                if live_info['member_id'] != member.id and (member.permission != MemberPerm.Administrator and member.permission != MemberPerm.Owner):
+                if live_info['member_id'] != member.id or live_info['group_id'] != group.id:
                     await app.sendGroupMessage(group, MessageChain.create([At(member.id),Plain("  你无权关闭直播"),Face(faceId=111)]))
                     return
                 elif live_info['live_status'] == 0:
